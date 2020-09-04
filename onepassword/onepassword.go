@@ -4,12 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
-	"os"
 	"os/exec"
-	"regexp"
-
-	"golang.org/x/crypto/ssh/terminal"
 )
 
 // Credentials defines git credentials.
@@ -30,60 +25,6 @@ type response struct {
 // Client defines a 1password client.
 type Client struct {
 	token string
-}
-
-// Login to 1password.
-func (c *Client) Login() error {
-	c.token = os.Getenv("OP_SESSION_my")
-
-	if c.token != "" {
-		return nil
-	}
-
-	fmt.Fprint(os.Stderr, "Enter your 1password master password: ")
-
-	tty, err := os.Open("/dev/tty")
-
-	if err != nil {
-		return err
-	}
-
-	defer tty.Close()
-	pass, err := terminal.ReadPassword(int(tty.Fd()))
-
-	if err != nil {
-		return err
-	}
-
-	var stdout bytes.Buffer
-
-	var stderr bytes.Buffer
-
-	var b bytes.Buffer
-
-	b.Write([]byte(fmt.Sprintf("%s\n", pass)))
-
-	cmd := exec.Command("op", "signin", "my")
-	cmd.Stdout = &stdout
-	cmd.Stdin = &b
-	cmd.Stderr = &stderr
-
-	err = cmd.Run()
-
-	if err != nil {
-		return errors.New(stderr.String()) // nolint:goerr113 // TODO: refactor
-	}
-
-	r := regexp.MustCompile("export OP_SESSION_my=\"([a-zA-Z0-9-_]+)\".*")
-	res := r.FindStringSubmatch(stdout.String())
-
-	if len(res) < 2 { // nolint:gomnd // see regex
-		return errors.New("no session token found") // nolint:goerr113 // TODO: refactor
-	}
-
-	c.token = res[1]
-
-	return nil
 }
 
 // GetCredentials loads credentials from 1password.
