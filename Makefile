@@ -10,10 +10,17 @@ endif
 GO_BUILD_FLAGS := -s -w -extldflags "-static"
 # go build command
 GO_BUILD := CGO_ENABLED=0 go build
+# go binary path
+GO_BINPATH := $(shell go env GOPATH)/bin
+# go linter
+GO_LINTER := $(GO_BINPATH)/golangci-lint$(SUFFIX)
 # go source files
 GO_FILES = $(shell find . -name '*.go')
 
 .DEFAULT_GOAL:=help
+
+$(GO_LINTER):
+	GO111MODULE=off go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.30.0
 
 ##@ Build
 
@@ -21,6 +28,20 @@ GO_FILES = $(shell find . -name '*.go')
 
 git-credential-1password: $(GO_FILES) ## Build git-credential-1password
 	$(GO_BUILD) -ldflags '$(GO_BUILD_FLAGS)' -o bin/git-credential-1password$(SUFFIX) github.com/develerik/git-credential-1password
+
+##@ Code Style
+
+.PHONY: lint
+
+lint: $(GO_LINTER) ## Lint the go source files
+	$(GO_LINTER) run
+
+##@ Cleaning
+
+.PHONY: clean
+
+clean: ## Clean previous build
+	rm -rf bin
 
 ##@ Helpers
 

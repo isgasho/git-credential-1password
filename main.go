@@ -19,7 +19,7 @@ const (
 var c = onepassword.Client{}
 
 func main() {
-	if len(os.Args) != 2 {
+	if len(os.Args) != 2 { // nolint:gomnd // TODO: use cobra
 		fmt.Printf("usage: %s <get> \n", os.Args[0])
 	}
 
@@ -30,14 +30,14 @@ func main() {
 }
 
 func handleCommand(key string, in io.Reader, out io.Writer) error {
-	switch key {
-	case "get":
+	if key == "get" {
 		return getCredentials(in, out)
 	}
-	return fmt.Errorf("unsupported operation: %s", key)
+
+	return fmt.Errorf("unsupported operation: %s", key) // nolint:goerr113 // TODO: refactor
 }
 
-func getCredentials(reader io.Reader, writer io.Writer) error {
+func getCredentials(reader io.Reader, writer io.Writer) error { // nolint:gocognit // TODO: refactor
 	scanner := bufio.NewScanner(reader)
 
 	data := map[string]string{}
@@ -61,7 +61,7 @@ func getCredentials(reader io.Reader, writer io.Writer) error {
 	host, exist := data[gitHostKey]
 
 	if !exist {
-		return fmt.Errorf("missing host to check credentials: %v", data)
+		return fmt.Errorf("missing host to check credentials: %v", data) // nolint:goerr113 // TODO: refactor
 	}
 
 	creds, err := c.GetCredentials(host)
@@ -80,5 +80,6 @@ func getCredentials(reader io.Reader, writer io.Writer) error {
 	}
 
 	fmt.Fprint(writer, buffer.String())
+
 	return nil
 }

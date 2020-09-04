@@ -12,7 +12,7 @@ import (
 	"golang.org/x/crypto/ssh/terminal"
 )
 
-// Credentials defines git credentials
+// Credentials defines git credentials.
 type Credentials struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
@@ -27,82 +27,79 @@ type response struct {
 	} `json:"details"`
 }
 
-// Client defines a 1password client
+// Client defines a 1password client.
 type Client struct {
 	token string
 }
 
-// Login to 1password
+// Login to 1password.
 func (c *Client) Login() error {
-	s := os.Getenv("OP_SESSION_my")
+	c.token = os.Getenv("OP_SESSION_my")
 
-	if s == "" {
-		fmt.Fprint(os.Stderr, "Enter your 1password master password: ")
-
-		tty, err := os.Open("/dev/tty")
-
-		if err != nil {
-			return err
-		}
-
-		defer tty.Close()
-		pass, err := terminal.ReadPassword(int(tty.Fd()))
-
-		if err != nil {
-			return err
-		}
-
-		var stdout bytes.Buffer
-		var stderr bytes.Buffer
-
-		var b bytes.Buffer
-		b.Write([]byte(fmt.Sprintf("%s\n", pass)))
-
-		cmd := exec.Command("op", "signin", "my")
-		cmd.Stdout = &stdout
-		cmd.Stdin = &b
-		cmd.Stderr = &stderr
-
-		err = cmd.Run()
-
-		if err != nil {
-			return errors.New(stderr.String())
-		}
-
-		r, err := regexp.Compile("export OP_SESSION_my=\"([a-zA-Z0-9-_]+)\".*")
-		res := r.FindStringSubmatch(stdout.String())
-
-		if err != nil {
-			return err
-		}
-
-		if len(res) < 2 {
-			return errors.New("no session token found")
-		}
-
-		c.token = res[1]
-	} else {
-		c.token = s
+	if c.token != "" {
+		return nil
 	}
 
-	os.Setenv("OP_SESSION_my", c.token)
+	fmt.Fprint(os.Stderr, "Enter your 1password master password: ")
+
+	tty, err := os.Open("/dev/tty")
+
+	if err != nil {
+		return err
+	}
+
+	defer tty.Close()
+	pass, err := terminal.ReadPassword(int(tty.Fd()))
+
+	if err != nil {
+		return err
+	}
+
+	var stdout bytes.Buffer
+
+	var stderr bytes.Buffer
+
+	var b bytes.Buffer
+
+	b.Write([]byte(fmt.Sprintf("%s\n", pass)))
+
+	cmd := exec.Command("op", "signin", "my")
+	cmd.Stdout = &stdout
+	cmd.Stdin = &b
+	cmd.Stderr = &stderr
+
+	err = cmd.Run()
+
+	if err != nil {
+		return errors.New(stderr.String()) // nolint:goerr113 // TODO: refactor
+	}
+
+	r := regexp.MustCompile("export OP_SESSION_my=\"([a-zA-Z0-9-_]+)\".*")
+	res := r.FindStringSubmatch(stdout.String())
+
+	if len(res) < 2 { // nolint:gomnd // see regex
+		return errors.New("no session token found") // nolint:goerr113 // TODO: refactor
+	}
+
+	c.token = res[1]
 
 	return nil
 }
 
-// GetCredentials loads credentials from 1password
+// GetCredentials loads credentials from 1password.
 func (c *Client) GetCredentials(host string) (*Credentials, error) {
 	var stdout bytes.Buffer
+
 	var stderr bytes.Buffer
 
-	cmd := exec.Command("op", "--session", c.token, "get", "item", host)
+	cmd := exec.Command("op", "--session", c.token, "get", "item", host) // nolint:gosec // TODO: validate
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
 
 	err := cmd.Run()
 
 	if err != nil {
-		return nil, errors.New(stderr.String())
+		return nil, errors.New(stderr.String()) // nolint:goerr113 // TODO: refactor
 	}
 
 	var res response
@@ -111,12 +108,14 @@ func (c *Client) GetCredentials(host string) (*Credentials, error) {
 	}
 
 	var username string
+
 	var password string
 
 	for _, field := range res.Details.Fields {
 		if field.Name == "username" {
 			username = field.Value
 		}
+
 		if field.Name == "password" {
 			password = field.Value
 		}

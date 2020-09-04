@@ -1,0 +1,175 @@
+---
+
+run:
+  # skip directories without go code
+  skip-dirs:
+    - bin
+  # do not modify the go.mod / go.sum files
+  modules-download-mode: readonly
+
+linters:
+  disable-all: true
+  enable:
+    # Simple linter to check that your code does not contain non-ASCII identifiers
+    - asciicheck
+    # Checks whether HTTP response body is closed successfully
+    - bodyclose
+    # Finds unused code
+    - deadcode
+    # Checks assignments with too many blank identifiers (e.g. x, , , _, := f())
+    - dogsled
+    # Tool for code clone detection
+    - dupl
+    # Errcheck is a program for checking for unchecked errors in go programs.
+    # These unchecked errors can be critical bugs in some cases
+    - errcheck
+    # Check exhaustiveness of enum switch statements
+    - exhaustive
+    # An analyzer that finds exporting pointers for loop variables
+    - exportloopref
+    # Tool for detection of long functions
+    - funlen
+    # Computes and checks the cognitive complexity of functions
+    - gocognit
+    # Finds repeated strings that could be replaced by a constant
+    - goconst
+    # The most opinionated Go source code linter
+    - gocritic
+    # Computes and checks the cyclomatic complexity of functions
+    - gocyclo
+    # Check if comments end in a period
+    - godot
+    # Tool for detection of comment keywords
+    - godox
+    # Golang linter to check the errors handling expressions
+    - goerr113
+    # Goimports does everything that gofmt does. Additionally it checks unused imports
+    - goimports
+    # Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes
+    - golint
+    # An analyzer to detect magic numbers
+    - gomnd
+    # Checks that printf-like functions are named with `f` at the end
+    - goprintffuncname
+    # Inspects source code for security problems
+    - gosec
+    # Linter for Go source code that specializes in simplifying a code
+    - gosimple
+    # Detects when assignments to existing variables are not used
+    - ineffassign
+    # Linter that suggests narrower interface types
+    - interfacer
+    # Reports long lines
+    - lll
+    # Tool to detect Go structs that would take less memory if their fields were sorted
+    - maligned
+    # Finds commonly misspelled English words in comments
+    - misspell
+    # Finds naked returns in functions greater than a specified function length
+    - nakedret
+    # Reports deeply nested if statements
+    - nestif
+    # noctx finds sending http request without context.Context
+    - noctx
+    # Reports ill-formed or insufficient nolint directives
+    - nolintlint
+    # Scopelint checks for unpinned variables in go programs
+    - scopelint
+    # Staticcheck is a go vet on steroids, applying a ton of static analysis checks
+    - staticcheck
+    # Finds unused struct fields
+    - structcheck
+    # Like the front-end of a Go compiler, parses and type-checks Go code
+    - typecheck
+    # Remove unnecessary type conversions
+    - unconvert
+    # Reports unused function parameters
+    - unparam
+    # Checks Go code for unused constants, variables, functions and types
+    - unused
+    # Finds unused global variables and constants
+    - varcheck
+    # Tool for detection of leading and trailing whitespace
+    - whitespace
+    # Whitespace Linter - Forces you to use empty lines!
+    - wsl
+
+linters-settings:
+  dupl:
+    # tokens count to trigger issue
+    threshold: 100
+  errcheck:
+    # report about not checking of errors in type assertions
+    check-type-assertions: true
+    # report about assignment of errors to blank identifier
+    check-blank: true
+  exhaustive:
+    # indicates that switch statements are to be considered exhaustive if a 'default' case is present
+    default-signifies-exhaustive: true
+  funlen:
+    lines: 60
+    statements: 40
+  gocognit:
+    # minimal code complexity to report
+    min-complexity: 10
+  goconst:
+    # minimal length of string constant
+    min-len: 2
+    # minimal occurrences count to trigger
+    min-occurrences: 2
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - experimental
+      - opinionated
+      - performance
+      - style
+    disabled-checks:
+      - dupImport
+  gocyclo:
+    # minimal code complexity to report
+    min-complexity: 10
+  godox:
+    # report any comments starting with keywords
+    keywords:
+      - BUG
+      - FIXME
+  goimports:
+    # put imports beginning with prefix after 3rd-party packages
+    local-prefixes: github.com/develerik/git-credential-1password
+  golint:
+    # minimal confidence for issues
+    min-confidence: 0
+  gomnd:
+    settings:
+      mnd:
+        # the list of enabled checks
+        checks: argument,case,condition,operation,return,assign
+  lll:
+    # max line length, lines longer will be reported
+    line-length: 120
+    # tab width in spaces
+    tab-width: 2
+  maligned:
+    # print struct with more effective memory layout or not
+    suggest-new: true
+  misspell:
+    # correct spellings using locale preferences for US
+    locale: US
+  nakedret:
+    # make an issue if func has more lines of code than this setting and it has naked returns
+    max-func-lines: 30
+  nestif:
+    # minimal complexity of if statements to report
+    min-complexity: 4
+  nolintlint:
+    # require an explanation of nonzero length after each nolint directive
+    require-explanation: true
+    # require nolint directives to mention the specific linter being suppressed
+    require-specific: true
+  unparam:
+    # inspect exported functions
+    check-exported: true
+  unused:
+    # treat code as a program and report unused exported identifiers
+    check-exported: true
