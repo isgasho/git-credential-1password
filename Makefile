@@ -6,8 +6,16 @@ ifndef VERBOSE
 .SILENT: # no need for @
 endif
 
+PACKAGE := github.com/develerik/git-credential-1password
+BUILD_HASH := $(shell git rev-parse --short HEAD)
+VERSION := ""
+
 # strip symbols
 GO_BUILD_FLAGS := -s -w -extldflags "-static"
+# define version
+GO_BUILD_FLAGS := $(GO_BUILD_FLAGS) -X $(PACKAGE)/cmd.Version=$(VERSION)
+# define build
+GO_BUILD_FLAGS := $(GO_BUILD_FLAGS) -X $(PACKAGE)/cmd.Build=$(BUILD_HASH)
 # go build command
 GO_BUILD := CGO_ENABLED=0 go build
 # go binary path
@@ -27,7 +35,7 @@ $(GO_LINTER):
 .PHONY: git-credential-1password
 
 git-credential-1password: $(GO_FILES) ## Build git-credential-1password
-	$(GO_BUILD) -ldflags '$(GO_BUILD_FLAGS)' -o bin/git-credential-1password$(SUFFIX) github.com/develerik/git-credential-1password
+	$(GO_BUILD) -ldflags '$(GO_BUILD_FLAGS)' -o bin/git-credential-1password$(SUFFIX) $(PACKAGE)
 
 ##@ Code Style
 
