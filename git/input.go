@@ -1,0 +1,26 @@
+package git
+
+import (
+	"bufio"
+	"bytes"
+	"io"
+)
+
+func ReadInput(r io.Reader) (map[string]string, error) {
+	scan := bufio.NewScanner(r)
+
+	data := map[string]string{}
+
+	for scan.Scan() {
+		kv := bytes.SplitN(scan.Bytes(), []byte("="), 2)
+		if len(kv) > 1 {
+			data[string(kv[0])] = string(kv[1])
+		}
+	}
+
+	if err := scan.Err(); err != nil && err != io.EOF {
+		return nil, err
+	}
+
+	return data, nil
+}

@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"bufio"
 	"bytes"
 	"fmt"
 	"io"
@@ -9,6 +8,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/develerik/git-credential-1password/git"
 	"github.com/develerik/git-credential-1password/onepassword"
 )
 
@@ -26,24 +26,14 @@ var getCmd = &cobra.Command{
 	},
 }
 
-func getCredentials(reader io.Reader, writer io.Writer) error { // nolint:gocognit // TODO: refactor
-	c := onepassword.Client{}
+func getCredentials(r io.Reader, w io.Writer) error {
+	data, err := git.ReadInput(r)
 
-	scanner := bufio.NewScanner(reader)
-
-	data := map[string]string{}
-	buffer := new(bytes.Buffer)
-
-	for scanner.Scan() {
-		keyAndValue := bytes.SplitN(scanner.Bytes(), []byte("="), 2)
-		if len(keyAndValue) > 1 {
-			data[string(keyAndValue[0])] = string(keyAndValue[1])
-		}
-	}
-
-	if err := scanner.Err(); err != nil && err != io.EOF {
+	if err != nil {
 		return err
 	}
+
+	c := onepassword.Client{}
 
 	if err := c.Login(); err != nil {
 		return err
@@ -64,15 +54,15 @@ func getCredentials(reader io.Reader, writer io.Writer) error { // nolint:gocogn
 	data["username"] = creds.Username
 	data["password"] = creds.Password
 
-	buffer.Reset()
+	buf := new(bytes.Buffer)
 
-	for key, value := range data {
-		if _, err = fmt.Fprintf(buffer, "%s=%s\n", key, value); err != nil {
+	for k, v := range data {
+		if _, err = fmt.Fprintf(buf, "%s=%s\n", k, v); err != nil {
 			return err
 		}
 	}
 
-	_, err = fmt.Fprint(writer, buffer.String())
+	_, err = fmt.Fprint(w, buf.String())
 
 	return err
 }
