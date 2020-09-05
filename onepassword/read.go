@@ -7,27 +7,6 @@ import (
 	"os/exec"
 )
 
-// Credentials defines git credentials.
-type Credentials struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
-
-type response struct {
-	Details struct {
-		Fields []struct {
-			Name  string `json:"name"`
-			Value string `json:"value"`
-		} `json:"fields"`
-	} `json:"details"`
-}
-
-// Client defines a 1password client.
-type Client struct {
-	token   string
-	Account string
-}
-
 // GetCredentials loads credentials from 1password.
 func (c *Client) GetCredentials(host string) (*Credentials, error) {
 	var stdout bytes.Buffer
