@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"regexp"
 
 	"golang.org/x/crypto/ssh/terminal"
 )
@@ -48,7 +47,7 @@ func (c *Client) Login() error {
 
 	stdin.Write([]byte(fmt.Sprintf("%s\n", pass)))
 
-	cmd := exec.Command("op", "signin", "my")
+	cmd := exec.Command("op", "signin", "my", "--raw")
 	cmd.Stdout = &stdout
 	cmd.Stdin = &stdin
 	cmd.Stderr = &stderr
@@ -57,15 +56,13 @@ func (c *Client) Login() error {
 		return errors.New(stderr.String()) // nolint:goerr113 // TODO: correctly handle error
 	}
 
-	m := regexp.
-		MustCompile("export OP_SESSION_my=\"([a-zA-Z0-9-_]+)\".*").
-		FindStringSubmatch(stdout.String())
+	token := stdout.String()
 
-	if len(m) < 2 { // nolint:gomnd // see regex
+	if token == "" {
 		return errNoSessionToken
 	}
 
-	c.token = m[1]
+	c.token = token
 
 	return nil
 }
