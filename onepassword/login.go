@@ -47,7 +47,7 @@ func (c *Client) Login() error {
 
 	stdin.Write([]byte(fmt.Sprintf("%s\n", pass)))
 
-	cmd := exec.Command("op", "signin", "my", "--raw")
+	cmd := exec.Command("op", "signin", c.Account, "--raw") // nolint:gosec // TODO: validate
 	cmd.Stdout = &stdout
 	cmd.Stdin = &stdin
 	cmd.Stderr = &stderr

@@ -24,7 +24,8 @@ type response struct {
 
 // Client defines a 1password client.
 type Client struct {
-	token string
+	token   string
+	Account string
 }
 
 // GetCredentials loads credentials from 1password.

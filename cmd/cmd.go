@@ -4,6 +4,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var account string
+
 // rootCmd represents the base command when called without any subcommands.
 var rootCmd = &cobra.Command{
 	Use:               "git-credential-1password [operation]",
@@ -45,6 +47,9 @@ func Execute() error {
 	getCmd.Flags().SortFlags = true
 	storeCmd.Flags().SortFlags = true
 	eraseCmd.Flags().SortFlags = true
+
+	rootCmd.PersistentFlags().StringVarP(&account, "account", "a", "my",
+		"the shorthand of the 1password account you want to use")
 
 	return rootCmd.Execute()
 }

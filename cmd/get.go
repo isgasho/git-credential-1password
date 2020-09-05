@@ -33,7 +33,9 @@ func getCredentials(r io.Reader, w io.Writer) error {
 		return err
 	}
 
-	c := onepassword.Client{}
+	c := onepassword.Client{
+		Account: account,
+	}
 
 	if err := c.Login(); err != nil {
 		return err
