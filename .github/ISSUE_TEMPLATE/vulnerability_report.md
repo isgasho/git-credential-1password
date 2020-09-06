@@ -29,9 +29,11 @@ Steps to reproduce the behavior:
 
 ### Additional context
 
+<!-- this 'git-credential-1password debug-info' command will help you -->
 - OS: <!-- e.g. Ubuntu, Windows -->
 - OS Build:  <!-- e.g. 20.04, 1809 -->
 - Shell: <!-- e.g. bash, powershell -->
+- Helper Version: <!-- e.g. 1.0.0 -->
 - Git Version: <!-- e.g. 2.28.0 -->
 - 1Password CLI Version: <!-- e.g. 1.5.0 -->
 

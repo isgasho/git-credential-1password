@@ -45,10 +45,12 @@ func Execute() error {
 	rootCmd.AddCommand(getCmd)
 	rootCmd.AddCommand(storeCmd)
 	rootCmd.AddCommand(eraseCmd)
+	rootCmd.AddCommand(debugInfoCmd)
 
 	getCmd.Flags().SortFlags = true
 	storeCmd.Flags().SortFlags = true
 	eraseCmd.Flags().SortFlags = true
+	debugInfoCmd.Flags().SortFlags = true
 
 	rootCmd.PersistentFlags().StringVarP(&account, "account", "a", "my",
 		"the shorthand of the 1password account you want to use")
