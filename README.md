@@ -1,7 +1,9 @@
 # git-credential-1password
 
-[![license](https://img.shields.io/github/license/develerik/git-credential-1password.svg?style=flat-square)](LICENSE)
-[![Go Report Card](https://goreportcard.com/badge/github.com/develerik/git-credential-1password?style=flat-square)](https://goreportcard.com/report/github.com/develerik/git-credential-1password)
+[![license](https://img.shields.io/github/license/develerik/git-credential-1password.svg)](LICENSE)
+[![Go Report Card](https://goreportcard.com/badge/github.com/develerik/git-credential-1password)](https://goreportcard.com/report/github.com/develerik/git-credential-1password)
+[![CodeQL](https://github.com/develerik/git-credential-1password/workflows/CodeQL/badge.svg)](https://github.com/develerik/git-credential-1password/actions?query=workflow%3ACodeQL)
+[![Code Style](https://github.com/develerik/git-credential-1password/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/develerik/git-credential-1password/actions?query=workflow%3A%22Lint+Code+Base%22)
 
 Helper to store git credentials inside 1password.
 
