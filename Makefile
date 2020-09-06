@@ -8,14 +8,17 @@ endif
 
 PACKAGE := github.com/develerik/git-credential-1password
 BUILD_HASH := $(shell git rev-parse --short HEAD)
-VERSION := ""
+BUILD_DATE := $(shell date --utc --iso-8601=seconds)
+VERSION := $(VERSION)
 
 # strip symbols
 GO_BUILD_FLAGS := -s -w -extldflags "-static"
 # define version
 GO_BUILD_FLAGS := $(GO_BUILD_FLAGS) -X $(PACKAGE)/cmd.Version=$(VERSION)
-# define build
+# define build hash
 GO_BUILD_FLAGS := $(GO_BUILD_FLAGS) -X $(PACKAGE)/cmd.Build=$(BUILD_HASH)
+# define build date
+GO_BUILD_FLAGS := $(GO_BUILD_FLAGS) -X $(PACKAGE)/cmd.Date=$(BUILD_DATE)
 # go build command
 GO_BUILD := CGO_ENABLED=0 go build
 # go binary path
