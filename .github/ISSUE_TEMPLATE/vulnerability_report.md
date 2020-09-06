@@ -33,5 +33,6 @@ Steps to reproduce the behavior:
 - OS Build:  <!-- e.g. 20.04, 1809 -->
 - Shell: <!-- e.g. bash, powershell -->
 - Git Version: <!-- e.g. 2.28.0 -->
+- 1Password CLI Version: <!-- e.g. 1.5.0 -->
 
 <!-- Add any other context about the problem here. -->
