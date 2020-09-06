@@ -50,8 +50,8 @@ provide individual support via email. We also believe that help is much more val
 more people can benefit from it.
 
 - [**Report a bug**](https://github.com/develerik/git-credential-1password/issues/new?labels=bug&template=bug_report.md)
-- [**Requests a new feature**](https://github.com/develerik/git-credential-1password/issues/new?labels=bug&template=feature_request.md)
-- [**Report a security vulnerability**](https://github.com/develerik/git-credential-1password/issues/new?labels=bug&template=vulnerability_report.md)
+- [**Requests a new feature**](https://github.com/develerik/git-credential-1password/issues/new?labels=enhancement&template=feature_request.md)
+- [**Report a security vulnerability**](https://github.com/develerik/git-credential-1password/issues/new?labels=vulnerability&template=vulnerability_report.md)
 
 ## Roadmap
 
