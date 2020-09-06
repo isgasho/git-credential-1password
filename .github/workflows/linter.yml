@@ -18,8 +18,10 @@ jobs:
       - name: Lint Code Base
         uses: github/super-linter@v3
         env:
+          VALIDATE_ALL_CODEBASE: false
           VALIDATE_GO: true
           VALIDATE_EDITORCONFIG: true
           VALIDATE_MD: true
           VALIDATE_YAML: true
           DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
