@@ -5,6 +5,7 @@ import (
 )
 
 var account string
+var cache uint
 
 // rootCmd represents the base command when called without any subcommands.
 var rootCmd = &cobra.Command{
@@ -50,6 +51,9 @@ func Execute() error {
 
 	rootCmd.PersistentFlags().StringVarP(&account, "account", "a", "my",
 		"the shorthand of the 1password account you want to use")
+
+	rootCmd.PersistentFlags().UintVarP(&cache, "cache", "c", 0,
+		"enable the master password cache and configure the timeout")
 
 	return rootCmd.Execute()
 }

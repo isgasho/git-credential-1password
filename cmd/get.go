@@ -20,7 +20,9 @@ var getCmd = &cobra.Command{
 	Short:            "Return a matching credential, if any exists",
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := getCredentials(os.Stdin, os.Stdout); err != nil {
-			fmt.Println(err)
+			if _, err = fmt.Fprintf(os.Stderr, "\n%s", err); err != nil {
+				panic(err)
+			}
 			os.Exit(1)
 		}
 	},
@@ -37,7 +39,7 @@ func getCredentials(r io.Reader, w io.Writer) error {
 		Account: account,
 	}
 
-	if err := c.Login(); err != nil {
+	if err := c.Login(cache); err != nil {
 		return err
 	}
 

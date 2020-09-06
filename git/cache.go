@@ -1,0 +1,67 @@
+package git
+
+import (
+	"bytes"
+	"errors"
+	"fmt"
+	"os/exec"
+)
+
+var EOF []byte
+
+func GetFromCache(account string) (string, error) {
+	var stdout bytes.Buffer
+
+	var stdin bytes.Buffer
+
+	var stderr bytes.Buffer
+
+	cmd := exec.Command("git", "credential-cache", "get")
+	cmd.Stdout = &stdout
+	cmd.Stdin = &stdin
+	cmd.Stderr = &stderr
+
+	host := fmt.Sprintf("1password-%s", account)
+
+	stdin.Write([]byte(fmt.Sprintf("host=%s\n", host)))
+	stdin.Write(EOF)
+
+	if err := cmd.Run(); err != nil {
+		return "", errors.New(stderr.String()) // nolint:goerr113 // TODO: refactor
+	}
+
+	data, err := ReadInput(bytes.NewReader(stdout.Bytes()))
+
+	if err != nil {
+		return "", err
+	}
+
+	return data["password"], nil
+}
+
+func StoreInCache(account, token string, timeout uint) error {
+	var stdout bytes.Buffer
+
+	var stdin bytes.Buffer
+
+	var stderr bytes.Buffer
+
+	t := fmt.Sprintf("%d", timeout)
+	cmd := exec.Command("git", "credential-cache", "--timeout", t, "store")
+	cmd.Stdout = &stdout
+	cmd.Stdin = &stdin
+	cmd.Stderr = &stderr
+
+	host := fmt.Sprintf("1password-%s", account)
+
+	stdin.Write([]byte(fmt.Sprintf("host=%s\n", host)))
+	stdin.Write([]byte("username=session-token\n"))
+	stdin.Write([]byte(fmt.Sprintf("password=%s\n", token)))
+	stdin.Write(EOF)
+
+	if err := cmd.Run(); err != nil {
+		return errors.New(stderr.String()) // nolint:goerr113 // TODO: refactor
+	}
+
+	return nil
+}

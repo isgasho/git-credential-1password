@@ -13,13 +13,12 @@ func (c *Client) GetCredentials(host string) (*Credentials, error) {
 
 	var stderr bytes.Buffer
 
+	// TODO: handle session expired error
 	cmd := exec.Command("op", "--session", c.token, "get", "item", host) // nolint:gosec // TODO: validate
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
 
-	err := cmd.Run()
-
-	if err != nil {
+	if err := cmd.Run(); err != nil {
 		return nil, errors.New(stderr.String()) // nolint:goerr113 // TODO: refactor
 	}
 

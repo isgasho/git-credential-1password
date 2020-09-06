@@ -6,8 +6,11 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 
 	"golang.org/x/crypto/ssh/terminal"
+
+	"github.com/develerik/git-credential-1password/git"
 )
 
 var (
@@ -15,14 +18,19 @@ var (
 )
 
 // Login to 1password.
-func (c *Client) Login() error {
-	c.token = os.Getenv("OP_SESSION_my")
+func (c *Client) Login(timeout uint) error {
+	var err error
+	c.token, err = git.GetFromCache(c.Account)
+
+	if err != nil {
+		return err
+	}
 
 	if c.token != "" {
 		return nil
 	}
 
-	if _, err := fmt.Fprint(os.Stderr, "Enter your 1password master password: "); err != nil {
+	if _, err = fmt.Fprint(os.Stderr, "Enter your 1password master password: "); err != nil {
 		return err
 	}
 
@@ -47,22 +55,27 @@ func (c *Client) Login() error {
 
 	stdin.Write([]byte(fmt.Sprintf("%s\n", pass)))
 
-	cmd := exec.Command("op", "signin", c.Account, "--raw") // nolint:gosec // TODO: validate
+	cmd := exec.Command("op", "signin", "--raw", c.Account) // nolint:gosec // TODO: validate
 	cmd.Stdout = &stdout
 	cmd.Stdin = &stdin
 	cmd.Stderr = &stderr
 
 	if err = cmd.Run(); err != nil {
-		return errors.New(stderr.String()) // nolint:goerr113 // TODO: correctly handle error
+		return fmt.Errorf("\n%s", stderr.String()) // nolint:goerr113 // TODO: correctly handle error
 	}
 
 	token := stdout.String()
+	token = strings.TrimSuffix(token, "\n")
 
 	if token == "" {
 		return errNoSessionToken
 	}
 
 	c.token = token
+
+	if timeout != 0 {
+		return git.StoreInCache(c.Account, c.token, timeout)
+	}
 
 	return nil
 }
