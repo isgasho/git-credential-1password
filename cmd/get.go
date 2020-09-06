@@ -1,4 +1,4 @@
-package cmd // nolint:golint // see cmd.go
+package cmd
 
 import (
 	"bytes"

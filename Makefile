@@ -32,17 +32,22 @@ $(GO_LINTER):
 
 ##@ Build
 
-.PHONY: git-credential-1password
+.PHONY: credential-helper
 
-git-credential-1password: $(GO_FILES) ## Build git-credential-1password
+credential-helper: bin/git-credential-1password$(SUFFIX) ## Build git-credential-1password
+
+bin/git-credential-1password$(SUFFIX): $(GO_FILES)
 	$(GO_BUILD) -ldflags '$(GO_BUILD_FLAGS)' -o bin/git-credential-1password$(SUFFIX) $(PACKAGE)
 
 ##@ Code Style
 
-.PHONY: lint
+.PHONY: lint lint-super
 
 lint: $(GO_LINTER) ## Lint the go source files
-	$(GO_LINTER) --exclude-use-default=false run
+	$(GO_LINTER) run -c .github/linters/.golangci.yml
+
+lint-super: $(GO_LINTER) ## Lint the whole project using GitHub's super-linter
+	docker run -e RUN_LOCAL=true -v $(PWD):/tmp/lint github/super-linter
 
 ##@ Cleaning
 

@@ -1,4 +1,4 @@
-package onepassword // nolint:golint // see doc.go
+package onepassword
 
 // Credentials defines git credentials.
 type Credentials struct {

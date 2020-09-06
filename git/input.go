@@ -1,4 +1,4 @@
-package git // nolint:golint // see doc.go
+package git
 
 import (
 	"bufio"

@@ -1,4 +1,4 @@
-package git // nolint:golint // see doc.go
+package git
 
 import (
 	"bytes"
@@ -49,7 +49,7 @@ func StoreInCache(account, token string, timeout uint) error {
 	var stderr bytes.Buffer
 
 	t := fmt.Sprintf("%d", timeout)
-	cmd := exec.Command("git", "credential-cache", "--timeout", t, "store") // nolint:gosec // TODO: validate
+	cmd := exec.Command("git", "credential-cache", "--timeout", t, "store")
 	cmd.Stdout = &stdout
 	cmd.Stdin = &stdin
 	cmd.Stderr = &stderr
