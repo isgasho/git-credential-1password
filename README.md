@@ -7,15 +7,17 @@ Helper to store git credentials inside 1password.
 
 ## Table of Contents
 
-- [Install](#install)
+- [Installation](#installation)
   - [Dependencies](#dependencies)
 - [Usage](#usage)
-- [Maintainers](#maintainers)
+- [Support](#support)
+- [Roadmap](#roadmap)
 - [Contributing](#contributing)
-- [License](#license)
+- [Maintainers](#maintainers)
 - [Acknowledgements](#acknowledgements)
+- [License](#license)
 
-## Install
+## Installation
 
 **Note**: Currently only installation from source is supported, so you must have `go` and `make` installed.
 
@@ -39,17 +41,30 @@ You also need to setup the cli tool with your 1password account ([guide](https:/
 git config --global credential.helper '!git-credential-1password'
 ```
 
-## Maintainers
+## Support
 
-- **Erik Bender** - *Initial work* - [develerik](https://github.com/develerik)
+This project is maintained by [@develerik](https://github.com/develerik). Please understand that we won't be able to
+provide individual support via email. We also believe that help is much more valuable if it's shared publicly, so that
+more people can benefit from it.
+
+- [**Report a bug**](https://github.com/develerik/git-credential-1password/issues/new?labels=bug&template=bug_report.md)
+- [**Requests a new feature**](https://github.com/develerik/git-credential-1password/issues/new?labels=bug&template=feature_request.md)
+- [**Report a security vulnerability**](https://github.com/develerik/git-credential-1password/issues/new?labels=bug&template=vulnerability_report.md)
+
+## Roadmap
+
+- Support `store` and `erase` operations
+<!--No changes are currently planned.-->
 
 ## Contributing
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct.
 
-## License
+## Maintainers
 
-Distributed under the ISC License. See [LICENSE](LICENSE) for more information.
+- **Erik Bender** - *Initial work* - [develerik](https://github.com/develerik)
+
+See also the list of [contributors](https://github.com/develerik/git-credential-1password/graphs/contributors) who participated in this project.
 
 ## Acknowledgements
 
@@ -58,3 +73,7 @@ Distributed under the ISC License. See [LICENSE](LICENSE) for more information.
 of a 1password credential helper which inspired me to create this project
 - [Netlify](https://www.netlify.com) for their [netlify credential helper](https://github.com/netlify/netlify-credential-helper)
 implemented in Go which helped me a lot on my own implementation
+
+## License
+
+Distributed under the ISC License. See [LICENSE](LICENSE) for more information.
