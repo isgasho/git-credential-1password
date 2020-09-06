@@ -1,3 +1,4 @@
+// Package cmd provides functions to generate a cli for this tool.
 package cmd
 
 import (

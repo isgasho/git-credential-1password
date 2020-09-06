@@ -1,3 +1,4 @@
+// Package main is the main entrypoint of this tool.
 package main
 
 import (

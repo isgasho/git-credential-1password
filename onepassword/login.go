@@ -1,4 +1,4 @@
-package onepassword
+package onepassword // nolint:golint // see doc.go
 
 import (
 	"bytes"
@@ -41,7 +41,7 @@ func (c *Client) Login(timeout uint) error {
 	}
 
 	defer func() {
-		_ = tty.Close()
+		_ = tty.Close() // nolint:errcheck // tty is probably already closed
 	}()
 
 	fd := int(tty.Fd())

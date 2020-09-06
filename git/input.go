@@ -1,4 +1,4 @@
-package git
+package git // nolint:golint // see doc.go
 
 import (
 	"bufio"
@@ -6,6 +6,7 @@ import (
 	"io"
 )
 
+// ReadInput reads key-value pairs from git output api.
 func ReadInput(r io.Reader) (map[string]string, error) {
 	scan := bufio.NewScanner(r)
 

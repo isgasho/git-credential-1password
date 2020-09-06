@@ -1,4 +1,4 @@
-package cmd
+package cmd // nolint:golint // see cmd.go
 
 import "fmt"
 

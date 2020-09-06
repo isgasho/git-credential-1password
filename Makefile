@@ -42,7 +42,7 @@ git-credential-1password: $(GO_FILES) ## Build git-credential-1password
 .PHONY: lint
 
 lint: $(GO_LINTER) ## Lint the go source files
-	$(GO_LINTER) run
+	$(GO_LINTER) --exclude-use-default=false run
 
 ##@ Cleaning
 

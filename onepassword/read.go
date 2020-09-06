@@ -1,4 +1,4 @@
-package onepassword
+package onepassword // nolint:golint // see doc.go
 
 import (
 	"bytes"

@@ -1,4 +1,4 @@
-package git
+package git // nolint:golint // see doc.go
 
 import (
 	"bytes"
@@ -7,8 +7,9 @@ import (
 	"os/exec"
 )
 
-var EOF []byte
+var eof []byte
 
+// GetFromCache reads a 1password session token from git cache.
 func GetFromCache(account string) (string, error) {
 	var stdout bytes.Buffer
 
@@ -24,7 +25,7 @@ func GetFromCache(account string) (string, error) {
 	host := fmt.Sprintf("1password-%s", account)
 
 	stdin.Write([]byte(fmt.Sprintf("host=%s\n", host)))
-	stdin.Write(EOF)
+	stdin.Write(eof)
 
 	if err := cmd.Run(); err != nil {
 		return "", errors.New(stderr.String()) // nolint:goerr113 // TODO: refactor
@@ -39,6 +40,7 @@ func GetFromCache(account string) (string, error) {
 	return data["password"], nil
 }
 
+// StoreInCache stores a 1password session token inside git cache.
 func StoreInCache(account, token string, timeout uint) error {
 	var stdout bytes.Buffer
 
@@ -47,7 +49,7 @@ func StoreInCache(account, token string, timeout uint) error {
 	var stderr bytes.Buffer
 
 	t := fmt.Sprintf("%d", timeout)
-	cmd := exec.Command("git", "credential-cache", "--timeout", t, "store")
+	cmd := exec.Command("git", "credential-cache", "--timeout", t, "store") // nolint:gosec // TODO: validate
 	cmd.Stdout = &stdout
 	cmd.Stdin = &stdin
 	cmd.Stderr = &stderr
@@ -57,7 +59,7 @@ func StoreInCache(account, token string, timeout uint) error {
 	stdin.Write([]byte(fmt.Sprintf("host=%s\n", host)))
 	stdin.Write([]byte("username=session-token\n"))
 	stdin.Write([]byte(fmt.Sprintf("password=%s\n", token)))
-	stdin.Write(EOF)
+	stdin.Write(eof)
 
 	if err := cmd.Run(); err != nil {
 		return errors.New(stderr.String()) // nolint:goerr113 // TODO: refactor
