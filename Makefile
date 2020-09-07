@@ -8,7 +8,7 @@ endif
 
 PACKAGE := github.com/develerik/git-credential-1password
 BUILD_HASH := $(shell git rev-parse --short HEAD)
-BUILD_DATE := $(shell date --utc --iso-8601=seconds)
+BUILD_DATE := $(shell git log -n1 --pretty='format:%cd' --date=format:'%Y-%m-%dT%H:%M:%S%z')
 VERSION := $(VERSION)
 
 # strip symbols

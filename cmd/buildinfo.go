@@ -1,8 +1,6 @@
 package cmd
 
-import (
-	"fmt"
-)
+import "fmt"
 
 var (
 	// Version is the application's version.
@@ -19,10 +17,10 @@ func getVersion() string {
 		// this init() is required because a CI/CD build might
 		// not always set a proper non-empty string
 		Version = "~dev~"
-	}
 
-	if Build != "" {
-		return fmt.Sprintf("%s (build #%s, %s)", Version, Build, Date)
+		if Build != "" {
+			return fmt.Sprintf("%s (build #%s, %s)", Version, Build, Date)
+		}
 	}
 
 	return Version
