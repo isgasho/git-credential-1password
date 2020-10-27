@@ -31,13 +31,13 @@ GO_FILES = $(shell find . -name '*.go')
 .DEFAULT_GOAL:=help
 
 $(GO_LINTER):
-	GO111MODULE=off go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.30.0
+	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(GO_BINPATH) v1.31.0
 
 ##@ Build
 
-.PHONY: credential-helper
+.PHONY: git-credential-1password
 
-credential-helper: bin/git-credential-1password$(SUFFIX) ## Build git-credential-1password
+git-credential-1password: bin/git-credential-1password$(SUFFIX) ## Build git-credential-1password
 
 bin/git-credential-1password$(SUFFIX): $(GO_FILES)
 	$(GO_BUILD) -ldflags '$(GO_BUILD_FLAGS)' -o bin/git-credential-1password$(SUFFIX) $(PACKAGE)
@@ -49,7 +49,7 @@ bin/git-credential-1password$(SUFFIX): $(GO_FILES)
 lint: $(GO_LINTER) ## Lint the go source files
 	$(GO_LINTER) run -c .github/linters/.golangci.yml
 
-lint-super: $(GO_LINTER) ## Lint the whole project using GitHub's super-linter
+lint-super: ## Lint the whole project using GitHub's super-linter
 	docker run -e RUN_LOCAL=true -v $(PWD):/tmp/lint github/super-linter
 
 ##@ Cleaning
