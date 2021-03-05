@@ -35,7 +35,7 @@ $(GO_LINTER):
 
 ##@ Build
 
-.PHONY: credential-helper
+.PHONY: git-credential-1password
 
 credential-helper: bin/git-credential-1password$(SUFFIX) ## Build git-credential-1password
 

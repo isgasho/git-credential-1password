@@ -5,9 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"os/exec"
 	"runtime"
 	"strings"
+
+	exec "golang.org/x/sys/execabs"
 
 	"golang.org/x/crypto/ssh/terminal"
 
@@ -79,7 +80,7 @@ func (c *Client) Login(timeout uint) error { // nolint:funlen // TODO: refactor
 
 	stdin.Write([]byte(fmt.Sprintf("%s\n", pass)))
 
-	cmd := exec.Command("op", "signin", "--raw", c.Account) // nolint:gosec // TODO: validate
+	cmd := exec.Command("op", "signin", "--cache", "--raw", c.Account) // nolint:gosec // TODO: validate
 	cmd.Stdout = &stdout
 	cmd.Stdin = &stdin
 	cmd.Stderr = &stderr
